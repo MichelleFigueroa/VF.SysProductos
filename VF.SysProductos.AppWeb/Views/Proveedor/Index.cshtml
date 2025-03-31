@@ -1,0 +1,54 @@
+﻿@model List<Proveedor>
+
+<h1>Lista de Proveedores</h1>
+
+<div class="d-flex gap-2">
+    <a asp-controller="Proveedor" asp-action="Create" class="btn btn-primary">Nuevo</a>
+    <a asp-action="ReporteProveedores" class="btn btn-dark">Generar Reporte</a>
+    <a asp-action="ReporteProveedorExcel" class="btn btn-dark">Generar Excel</a>
+</div>
+<br />
+<br />
+<div class="card">
+    <form asp-action="SubirExcelProveedores" asp-controller="Proveedor" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="archivoExcel">Subir Excel</label>
+            <input type="file" name="archivoExcel" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Subir y guardar</button>
+    </form>
+</div>
+
+<br />
+<br />
+@if (Model != null)
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Nombre</td>
+                <td>NRC</td>
+                <td>Dirección</td>
+                <td>Teléfono</td>
+                <td>Email</td>
+                <td>Acciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var proveedor in Model)
+            {
+                <tr>
+                    <td>@proveedor.Nombre</td>
+                    <td>@proveedor.NRC</td>
+                    <td>@proveedor.Direccion</td>
+                    <td>@proveedor.Telefono</td>
+                    <td>@proveedor.Email</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Proveedor" asp-action="Edit" asp-route-id="@proveedor.Id">Editar</a> |
+                        <a class="btn btn-danger" asp-controller="Proveedor" asp-action="Delete" asp-route-id="@proveedor.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

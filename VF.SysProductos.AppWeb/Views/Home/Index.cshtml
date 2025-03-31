@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <div class="row">
+        <!-- Gráfico de Pastel -->
+        <div class="col-md-6 col-lg-3 p-2">
+            <div class="card">
+                <div class="card-header">
+                    Gráfico de Pastel
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoPastel" style="max-width: 100%; height: 250px;"></canvas>
+                </div>
+                <div class="card-footer">
+                    Stock de Productos
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Barra -->
+        <div class="col-md-6 col-lg-3 p-2">
+            <div class="card">
+                <div class="card-header">
+                    Gráfico de Barra
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoBarra" style="max-width: 100%; height: 250px;"></canvas>
+                </div>
+                <div class="card-footer">
+                    Promedio de Precio
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let chartInstancePastel = null;
+    let chartInstanceBarra = null;
+
+    function cargarGraficaPastel() {
+        fetch('/Producto/ProductosJson')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Datos recibidos para gráfica de pastel:", data);
+
+                if (!data || data.length === 0) {
+                    console.warn("No hay datos para mostrar en la gráfica de pastel.");
+                    return;
+                }
+
+                const nombres = data.map(p => p.nombre);
+                const cantidades = data.map(p => p.cantidad);
+
+                console.log("Nombres:", nombres);
+                console.log("Cantidades:", cantidades);
+
+                var pastelCanvas = document.getElementById('graficoPastel');
+                if (!pastelCanvas) {
+                    console.error("No se encontró el canvas para la gráfica de pastel.");
+                    return;
+                }
+
+                var ctx = pastelCanvas.getContext('2d');
+
+                if (chartInstancePastel) {
+                    chartInstancePastel.destroy();
+                }
+
+                chartInstancePastel = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: nombres,
+                        datasets: [{
+                            label: 'Stock de Productos',
+                            data: cantidades,
+                            backgroundColor: nombres.map(() => `hsl(${Math.random() * 360}, 70%, 60%)`),
+                            borderColor: 'rgba(255, 255, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error obteniendo los datos de la gráfica de pastel:', error));
+    }
+
+    function cargarGraficaBarra() {
+        fetch('/Producto/ProductsJsonPrecio')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Datos recibidos para gráfica de barra:", data);
+
+                if (!data || data.length === 0) {
+                    console.warn("No hay datos para mostrar en la gráfica de barra.");
+                    return;
+                }
+
+                const fechas = data.map(p => p.fecha);
+                const precios = data.map(p => p.precio);
+
+                console.log("Fechas:", fechas);
+                console.log("Precios:", precios);
+
+                var barraCanvas = document.getElementById('graficoBarra');
+                if (!barraCanvas) {
+                    console.error("No se encontró el canvas para la gráfica de barra.");
+                    return;
+                }
+
+                var ctx = barraCanvas.getContext('2d');
+
+                if (chartInstanceBarra) {
+                    chartInstanceBarra.destroy();
+                }
+
+                chartInstanceBarra = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: fechas,
+                        datasets: [{
+                            label: 'Precio Promedio',
+                            data: precios,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error obteniendo los datos de la gráfica de barra:', error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        cargarGraficaPastel();
+        cargarGraficaBarra();
+    });
+</script>

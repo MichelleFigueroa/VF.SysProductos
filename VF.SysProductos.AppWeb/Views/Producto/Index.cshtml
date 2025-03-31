@@ -1,0 +1,52 @@
+﻿@model List<Producto>
+
+<h1>Lista de Productos</h1>
+
+<div class="d-flex gap-2">
+    <a asp-controller="Producto" asp-action="Create" class="btn btn-primary">Nuevo</a>
+    <a asp-action="ReporteProductos" class="btn btn-dark">Generar Reporte</a>
+   <a asp-action="ReporteProductoExcel" class="btn btn-dark">Generar Excel</a>
+
+</div>
+<div class="card">
+    <form asp-action="SubirExcelProductos" asp-controller="Producto" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="archivoExcel">Subir Excel</label>
+            <input type="file" name="archivoExcel" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Subir y guardar</button>
+    </form>
+</div>
+
+
+
+    @if (Model != null)
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Nombre</td>
+                    <td>Precio</td>
+                    <td>Cantidad</td>
+                    <td>Fecha de Creacion</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var rol in Model)
+                {
+                    <tr>
+                        <th>@rol.Nombre</th>
+                        <th>@rol.Precio</th>
+                        <th>@rol.CantidadDisponible</th>
+                        <th>@rol.FechaCreacion</th>
+                        <th>
+                            <a class="btn btn-primary" asp-controller="Producto" asp-action="Edit" asp-route-id="@rol.Id">Editar</a> |
+                            <a class="btn btn-danger" asp-controller="Producto" asp-action="Delete" asp-route-id="@rol.Id">Eliminar</a>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
