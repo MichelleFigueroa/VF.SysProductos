@@ -19,6 +19,8 @@ builder.Services.AddScoped<ProveedorDAL>();
 builder.Services.AddScoped<ProveedorBL>();
 builder.Services.AddScoped<CompraDAL>();
 builder.Services.AddScoped<CompraBL>();
+builder.Services.AddScoped<ClienteDAL>();
+builder.Services.AddScoped<ClienteBL>();
 
 // Agregar servicios de MVC
 builder.Services.AddControllersWithViews();
