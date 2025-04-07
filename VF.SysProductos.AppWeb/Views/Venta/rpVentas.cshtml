@@ -1,0 +1,66 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Reporte de Ventas</title>
+</head>
+<body>
+    <h2 style="text-align: center;">Reporte de Ventas</h2>
+    <table border="1" width="100%" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Fecha de Venta</th>
+                <th>Cliente</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Total de la Venta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int totalCantidad = 0;
+                decimal totalSubtotal = 0;
+                decimal totalGeneral = 0;
+
+                foreach (var venta in Model)
+                {
+                    int detallesCount = venta.DetalleVentas.Count;
+                    bool primeraFila = true;
+
+                    foreach (var detalle in venta.DetalleVentas)
+                    {
+                        totalCantidad += detalle.Cantidad;
+                        totalSubtotal += detalle.SubTotal;
+                        totalGeneral += venta.Total;
+
+                        <tr>
+                            @if (primeraFila)
+                            {
+                                <td rowspan="@detallesCount">@venta.FechaVenta.ToString("yyyy-MM-dd")</td>
+                                <td rowspan="@detallesCount">@venta.Cliente?.Nombre ?? "N/A"</td>
+                                primeraFila = false;
+                            }
+                            <td>@detalle.Producto?.Nombre ?? "N/A"</td>
+                            <td>@detalle.Cantidad</td>
+                            <td>@detalle.SubTotal.ToString("F2")</td>
+                            <td>@venta.Total.ToString("F2")</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right; font-weight: bold;">Totales:</td>
+                <td>@totalCantidad</td>
+                <td>@totalSubtotal.ToString("F2")</td>
+                <td>@totalGeneral.ToString("F2")</td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>

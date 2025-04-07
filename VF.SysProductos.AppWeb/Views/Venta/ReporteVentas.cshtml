@@ -1,0 +1,37 @@
+﻿@model VentaFiltros
+
+@{
+    ViewData["Title"] = "Reporte de Ventas";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white text-center">
+            <h4 class="mb-0">Reporte de Ventas</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="DescargarReporteVenta" method="get">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="FechaInicio" class="form-label fw-bold">Fecha Inicio</label>
+                        <input type="date" id="FechaInicio" name="FechaInicio" class="form-control" required />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="FechaFin" class="form-label fw-bold">Fecha Fin</label>
+                        <input type="date" id="FechaFin" name="FechaFin" class="form-control" required />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="TipoReporte" class="form-label fw-bold">Tipo de Reporte</label>
+                        <select id="TipoReporte" name="TipoReporte" class="form-select">
+                            <option value="1">PDF</option>
+                            <option value="2">Excel</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">Generar Reporte</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
