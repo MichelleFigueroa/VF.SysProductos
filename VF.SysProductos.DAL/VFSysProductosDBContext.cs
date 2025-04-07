@@ -29,6 +29,8 @@ namespace VF.SysProductos.DAL
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
+        public DbSet<DetalleVenta> DetalleVentas { get; set; }
 
     }
 }
